@@ -1,0 +1,29 @@
+name: split-into-kmers
+version: "0.0.1"
+author: Joseph Guhlin <joseph.guhlin@gmail.com>
+about: Splits FASTA and FASTQ files into individual kmers
+args:
+    - fasta:
+        help: Sets the FASTA input file(s) to use (may be compressed)
+        required: false
+        short: f
+        multiple: true
+        takes_value: true
+    - fastq:
+        short: q
+        multiple: true
+        help: Sets the FASTQ input file(s) to use (may be compressed)
+        takes_value: true
+    - output:
+        short: o
+        help: Output prefix (default STDOUT)
+        multiple: false
+        takes_value: true
+    - gzip:
+        short: z
+        help: GZIP compress output (NOT IMPLEMENTED YET)
+    - kmer:
+        short: k
+        help: Kmer size
+        default_value: "25"
+        takes_value: true
