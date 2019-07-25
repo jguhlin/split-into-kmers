@@ -22,6 +22,11 @@ args:
     - gzip:
         short: z
         help: GZIP compress output (NOT IMPLEMENTED YET)
+    - labels:
+        short: l
+        multiple: true
+        takes_value: true
+        help: Labels to prepend to each line (automatically adds __label__ to each label)
     - kmer:
         short: k
         help: Kmer size

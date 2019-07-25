@@ -38,9 +38,49 @@ fn main() {
 
     // TODO: Put GzEncoder logic here if gzip flag is passed
 
-    if let Some(fasta) = matches.values_of("fasta") {
+    if let Some(fastas) = matches.values_of("fasta") {
+        for fasta in fastas {
+            parse_fasta(fasta);
+        }
         
     }
+
+}
+
+// Should/could turn this into an iterator, but... eh
+fn parse_fasta(filename: &str) {
+    let gzipped: bool = filename.ends_with("gz");
+    println!("{}", gzipped);
+
+    let fasta_fh = match File::open(filename) {
+        Ok(x) => x,
+        Err(y) => panic!("Unable to open file: {} because {}", filename, y)
+    };
+  
+    let fasta: Box<Read> = match filename.ends_with("gz") {
+        true  => Box::new(flate2::read::GzDecoder::new(fasta_fh)),
+        false => Box::new(fasta_fh)
+    };
+
+    let fasta = BufReader::with_capacity(64 * 1024 * 1024, fasta);
+
+    for line in fasta.lines() {
+        output_writer.write(labels.as_bytes());
+        output_writer.write(b" ");
+        for kmerx in line.unwrap().chars().collect::<Vec<char>>().chunks_exact(KMER).map(|x| x.into_iter().collect::<String>()) {
+            let length = kmerx.chars().count();
+            if length == KMER {
+                output_writer.write(kmerx.as_bytes());
+                output_writer.write(b" ");
+            }
+        }
+        output_writer.write(b"\n");
+    }
+
+
+}
+
+
 
 
 
@@ -75,5 +115,5 @@ fn main() {
         }
         output_writer.write(b"\n");
 
-    } */
-}
+    } 
+} */
